@@ -3,8 +3,8 @@
 Name: {{.Workflow}}
 View log: {{.ActionUrl}}
 
-:tada: Passed {{.Passed}} / {{.Total}}
-:fire: Failed {{.Failed}} / {{.Total}}
+:heavy_check_mark: Passed {{.Passed}} / {{.Total}}
+:x: Failed {{.Failed}} / {{.Total}}
 
 {{ if eq (len .FailedTests) 0 }}
 
