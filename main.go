@@ -124,13 +124,17 @@ const (
 )
 
 var (
-	token      = flag.String("access_token", os.Getenv("GH_ACCESS_TOKEN"), "GitHub Access Token")
-	owner      = flag.String("repo_owner", os.Getenv("REPO_OWNER"), "Repository owner")
-	sha        = flag.String("sha", os.Getenv("COMMIT_SHA"), "Commit`s SHA")
-	repository = flag.String("repository", os.Getenv("REPOSITORY"), "Repository")
-	reportPath = flag.String("report_path", os.Getenv("REPORT_PATH"), "Location of output.xml")
-	prNumber   = flag.String("pullrequest_number", os.Getenv("PR_NUMBER"), "Pull request number")
-	actionRef  = flag.String("actionRef", os.Getenv("GITHUB_ACTION_REF"), "Pull request number")
+	token           = flag.String("access_token", os.Getenv("GH_ACCESS_TOKEN"), "GitHub Access Token")
+	owner           = flag.String("repo_owner", os.Getenv("REPO_OWNER"), "Repository owner")
+	sha             = flag.String("sha", os.Getenv("COMMIT_SHA"), "Commit`s SHA")
+	repository      = flag.String("repository", os.Getenv("REPOSITORY"), "Repository")
+	reportPath      = flag.String("report_path", os.Getenv("REPORT_PATH"), "Location of output.xml")
+	prNumber        = flag.String("pullrequest_number", os.Getenv("PR_NUMBER"), "Pull request number")
+	githubServerUrl = flag.String("githubServerUrl", os.Getenv("GITHUB_SERVER_URL"), "Github Server URL")
+	githubRepo      = flag.String("githubRepo", os.Getenv("GITHUB_REPOSITORY"), "Github Repo")
+	githubRunId     = flag.String("githubRunId", os.Getenv("GITHUB_RUN_ID"), "Github run ID")
+	githubWorkflow  = flag.String("githubWorkflow", os.Getenv("GITHUB_WORKFLOW"), "Github Workflow")
+	githubRunNumber = flag.String("githubRunNumber", os.Getenv("GITHUB_RUN_NUMBER"), "Github run NO.")
 )
 
 func readOutput() (*os.File, error) {
@@ -235,13 +239,16 @@ func main() {
 	passed := robot.Statistics.Total.Stat[0].Pass
 	failed := robot.Statistics.Total.Stat[0].Fail
 	total := len(robot.Suite.Suite.Test)
+	workflow := fmt.Sprintf("%s #%s", *githubWorkflow, *githubRunNumber)
+	actionUrl := fmt.Sprintf("%s/%s/actions/runs/%s", *githubServerUrl, *githubRepo, *githubRunId)
 
 	vars := make(map[string]interface{})
 	vars["Passed"] = &passed
 	vars["Failed"] = &failed
 	vars["Total"] = &total
 	vars["FailedTests"] = &failures
-	vars["ActionRef"] = &actionRef
+	vars["Workflow"] = &workflow
+	vars["ActionUrl"] = &actionUrl
 
 	var tp bytes.Buffer
 

@@ -1,5 +1,7 @@
 ### Robot Results
-{{.ActionRef}}
+
+Name: {{.Workflow}}
+View log: {{.ActionUrl}}
 
 :tada: Passed {{.Passed}} / {{.Total}}
 :fire: Failed {{.Failed}} / {{.Total}}
